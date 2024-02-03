@@ -2,9 +2,10 @@ API for application to facilitate shopping
 
 
 Installation
--> npm install
--> dans config changer le config.jon.example en config.json et configurer
+-> npm install && npx tsc --init
+-> npx prisma && npx prisma init
+-> changez le .env.example en .env et configurer
 
--> lancer la commander "sequelize db:create"
--> lancer la commande "sequelize db:migrate"
--> lancer la génération des seeds "sequelize db:seed:all"
+-> lancer la commander "npx prisma migrate dev" pour générer la base de données
+
+-> lancer la commande "npx prisma db seed" pour lancer la génération des seed
