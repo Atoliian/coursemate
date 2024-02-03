@@ -6,45 +6,55 @@ const defaultService = new DefaultService();
 
 const { validationResult, check } = require("express-validator");
 
-const categoryController = {
+const itemController = {
   getAll: async (req, res) => {
     try {
       const currentPage = parseInt(req.query.page) || 1;
       const itemsPerPage = parseInt(req.query.itemsPerPage) || 10;
-      const keyword = req.query.search;
-      const query = keyword
-        ? await prisma.categoryItem.findMany({
+      const categories = req.query.categories;
+      const keyword = req.query.wording;
+      const query = ((Array.isArray(categories)&& categories.length > 0) || keyword)
+        ? await prisma.item.findMany({
           where: {
-            wording: {
-              contains: keyword,
-            },
+            AND: [
+              {
+                wording: {
+                  contains: keyword,
+                },
+              },
+              {
+                categoryId: {
+                  in: categories.map(category => parseInt(category, 10)),
+                },
+              },
+            ],
           },
         })
-        : await prisma.categoryItem.findMany();
+        : await prisma.item.findMany();
 
-      const categories = await defaultService.paginate(
+      const items = await defaultService.paginate(
         query,
-        "categories",
+        "items",
         currentPage,
         itemsPerPage
       );
-      res.status(200).json(categories);
+      res.status(200).json(items);
     } catch (error) {
-      console.error("Error retrieving categories :", error);
+      console.error("Error retrieving items :", error);
       res.status(500).json({ error: "Error server" });
     }
   },
   getById: async (req, res) => {
     try {
-      const categoryId = parseInt(req.params.id);
-      const category = await prisma.categoryItem.findUniqueOrThrow({
+      const itemId = parseInt(req.params.id);
+      const item = await prisma.item.findUniqueOrThrow({
         where: {
-          id: categoryId,
+          id: itemId,
         },
       });
-      res.status(200).json(category);
+      res.status(200).json(item);
     } catch (error) {
-      console.error("Error retrieving categories :", error);
+      console.error("Error retrieving items :", error);
       res.status(500).json({ error: "Error server" });
     }
   },
@@ -87,4 +97,4 @@ const categoryController = {
     }
   },
 };
-module.exports = categoryController;
+module.exports = itemController;
