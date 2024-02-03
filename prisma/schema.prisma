@@ -12,6 +12,7 @@ datasource db {
 
 model User {
   id      Int      @id @default(autoincrement())
+  entity String   @default("User")
   identifier   String   @unique
   name    String?
   brackets Bracket[]
@@ -19,16 +20,19 @@ model User {
 
 model Bracket {
   id      Int      @id @default(autoincrement())
+  entity String   @default("Bracket")
   color   String?
   name    String?
   owner    User     @relation(fields: [ownerId], references: [id])
   ownerId  Int
   createdAt DateTime @default(now())
   updatedAt DateTime?
+  expiredAt DateTime?
 }
 
 model CategoryItem {
   id      Int      @id @default(autoincrement())
+  entity String   @default("CategoryItem")
   wording String
   color   String?
   items   Item[]
@@ -37,6 +41,7 @@ model CategoryItem {
 
 model Item {
   id      Int      @id @default(autoincrement())
+  entity String   @default("Item")
   wording String
   category    CategoryItem     @relation(fields: [categoryId], references: [id])
   categoryId  Int
