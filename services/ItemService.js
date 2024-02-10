@@ -5,9 +5,9 @@ class CategoryService {
 
     /**
      * Compares the item data from the database with that passed as a parameter
-     *  [ RETURN array ]
-     * @param {int} itemId
-     * @param {array} fieldData
+     *  [ RETURN ARRAY ]
+     * @param {number} itemId
+     * @param {[]} fieldData
      */
     async compareDataForUpdate(itemId, fieldData){
 
@@ -33,6 +33,11 @@ class CategoryService {
        
         return response;
     }
+
+    /**
+     * Returns the default category id
+     * [RETURN INT]
+     */
 
     async getIdDefaultCategory(){
         const defaultCategory = await prisma.categoryItem.findFirst({

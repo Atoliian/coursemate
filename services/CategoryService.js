@@ -6,8 +6,8 @@ class CategoryService {
     /**
      * Compares the category data from the database with that passed as a parameter
      *  [ RETURN array ]
-     * @param {int} categoryId
-     * @param {array} fieldData
+     * @param {number} categoryId
+     * @param {[]} fieldData
      */
     async compareDataForUpdate(categoryId, fieldData){
 

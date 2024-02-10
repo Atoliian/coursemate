@@ -1,4 +1,13 @@
 class DefaultService {
+
+  /**
+   * Pagination system based on data passed as a parameter
+   * @param {[]} data 
+   * @param {string} context 
+   * @param {number} currentPage 
+   * @param {number} itemsPerPage 
+   * @returns 
+   */
   async paginate(data, context, currentPage, itemsPerPage = 10) {
     const startIndex = (currentPage - 1) * itemsPerPage;
     const endIndex = currentPage * itemsPerPage;
