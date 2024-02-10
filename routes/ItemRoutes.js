@@ -10,11 +10,16 @@ router.post(
   "/",
   [
     body("wording").isString().notEmpty(),
-    body("color").optional().isHexColor(),
+    body("categoryId").optional().isNumeric(),
   ],
   itemController.create
-);
-router.put("/:id", itemController.update);
-router.delete("/:id", itemController.remove);
+); // TODO : Rajouter une règle de sécurité pour cette route, que les admins
+router.put("/:id", 
+  [
+    body("wording").optional().isString(),
+    body("color").optional().isHexColor(),
+  ],
+  itemController.update); // TODO : Rajouter une règle de sécurité pour cette route, que les admins
+router.delete("/:id", itemController.remove); // TODO : Rajouter une règle de sécurité pour cette route, que les admins
 
 module.exports = router;

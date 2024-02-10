@@ -78,6 +78,10 @@ const items = [
     {
         "wording": "Produits écologiques",
         "color": "#66CC66"
+    },
+    {
+        "wording": "Autres",
+        "color": "#D3D3D3"
     }
 ];
 

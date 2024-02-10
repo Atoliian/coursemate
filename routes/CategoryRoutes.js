@@ -13,8 +13,13 @@ router.post(
     body("color").optional().isHexColor(),
   ],
   categoryController.create
-);
-router.put("/:id", categoryController.update);
-router.delete("/:id", categoryController.remove);
+); // TODO : Rajouter une règle de sécurité pour cette route, que les admins
+router.put("/:id", 
+  [
+    body("wording").optional().isString(),
+    body("color").optional().isHexColor(),
+  ],
+  categoryController.update); // TODO : Rajouter une règle de sécurité pour cette route, que les admins
+router.delete("/:id", categoryController.remove); // TODO : Rajouter une règle de sécurité pour cette route, que les admins
 
 module.exports = router;

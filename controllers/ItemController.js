@@ -3,6 +3,8 @@ const prisma = new PrismaClient();
 
 const DefaultService = require("../services/DefaultService");
 const defaultService = new DefaultService();
+const ItemService = require("../services/ItemService");
+const itemService = new ItemService();
 
 const { validationResult, check } = require("express-validator");
 
@@ -13,7 +15,7 @@ const itemController = {
       const itemsPerPage = parseInt(req.query.itemsPerPage) || 10;
       const categories = req.query.categories;
       const keyword = req.query.wording;
-      const query = ((Array.isArray(categories)&& categories.length > 0) || keyword)
+      const query = ((Array.isArray(categories)&& categories.length > 0) && keyword)
         ? await prisma.item.findMany({
           where: {
             AND: [
@@ -28,6 +30,22 @@ const itemController = {
                 },
               },
             ],
+          },
+        })
+        :  keyword ? 
+        await prisma.item.findMany({
+          where: {
+            wording: {
+              contains: keyword,
+            },
+          },
+        })
+        : (Array.isArray(categories)&& categories.length > 0) ?
+        await prisma.item.findMany({
+          where: {
+            categoryId: {
+              in: categories.map(category => parseInt(category, 10)),
+            },
           },
         })
         : await prisma.item.findMany();
@@ -55,7 +73,7 @@ const itemController = {
       res.status(200).json(item);
     } catch (error) {
       console.error("Error retrieving items :", error);
-      res.status(500).json({ error: "Error server" });
+      res.status(404).json({ error: "Item not found" });
     }
   },
   create: async (req, res) => {
@@ -65,29 +83,63 @@ const itemController = {
         return res.status(422).json({ errors: errors.array() });
       }
 
-      const { wording, color } = req.body;
+      var { wording, categoryId } = req.body;
+      const createdAt = new Date();
 
-      const newCategory = await prisma.categoryItem.create({
+      if(!categoryId){
+        categoryId = await itemService.getIdDefaultCategory();
+      }
+
+
+      const newItem = await prisma.item.create({
         data: {
           wording,
-          color,
+          categoryId,
+          createdAt
         },
       });
-      res.status(201).json(newCategory);
+      res.status(201).json(newItem);
     } catch (error) {
       console.error(error);
       res.status(500).json({ error: "Internal Server Error" });
     }
   },
-  update: (req, res) => {
-    // Logique pour mettre à jour une catégorie spécifique par ID
+  update: async (req, res) => {
+    try {
+
+      const errors = validationResult(req);
+      if (!errors.isEmpty()) {
+        return res.status(422).json({ errors: errors.array() });
+      }
+
+      const itemId = parseInt(req.params.id);
+      let { wording, categoryId } = req.body;
+      const updatedData =  await itemService.compareDataForUpdate(itemId, {"wording": wording, "categoryId": categoryId});
+      wording = updatedData["wording"];
+      categoryId = updatedData["categoryId"];
+
+      const itemUpdated = await prisma.item.update({
+        where: {
+          id: itemId,
+        },
+        data: {
+          wording,
+          categoryId
+        },
+      });
+      res.status(201).json(itemUpdated);
+       
+    }catch (error) {
+      console.error("Error retrieving items :", error);
+      res.status(500).json({ error: "Error server" });
+    }
   },
   remove: async (req, res) => {
     try {
-      const categoryId = parseInt(req.params.id);
-      const category = await prisma.categoryItem.delete({
+      const itemId = parseInt(req.params.id);
+      const item = await prisma.item.delete({
         where: {
-          id: categoryId,
+          id: itemId,
         },
       });
       res.status(201).json("Deletion successfull");

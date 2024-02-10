@@ -9,3 +9,8 @@ Installation
 -> lancer la commander "npx prisma migrate dev" pour générer la base de données
 
 -> lancer la commande "npx prisma db seed" pour lancer la génération des seed
+
+
+
+Démarrage
+-> node index.js pour lancer le serveur node de l'api
