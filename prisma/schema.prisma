@@ -14,7 +14,10 @@ model User {
   id      Int      @id @default(autoincrement())
   entity String   @default("User")
   identifier   String   @unique
+  email String?
   name    String?
+  password    String?
+  active Boolean   @default(false)
   brackets Bracket[]
 }
 

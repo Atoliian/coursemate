@@ -10,6 +10,8 @@ Installation
 
 -> lancer la commande "npx prisma db seed" pour lancer la génération des seed
 
+-> créer les clés RSA pour l'auth jwt "npm run generate:rsaKey"
+
 
 
 Démarrage
