@@ -15,4 +15,4 @@ Installation
 
 
 Démarrage
--> node index.js pour lancer le serveur node de l'api
+-> nodemon index.js pour lancer le serveur node de l'api

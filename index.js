@@ -3,6 +3,9 @@ const helmet = require("helmet");
 const rateLimitMiddleware = require("./middlewares/ratelimit");
 const app = express();
 const port = 3000;
+require('@babel/register')({
+  presets: ['@babel/preset-react']
+});
 
 // import des routes
 const categoryRoutes = require("./routes/CategoryRoutes");
@@ -16,9 +19,9 @@ app.use(rateLimitMiddleware);
 
 
 // Déclaration des routes
-app.use("/categories", categoryRoutes);
-app.use("/items", itemRoutes);
-app.use("/auth",authRoutes);
+app.use("/api/categories", categoryRoutes);
+app.use("/api/items", itemRoutes);
+app.use("/api/auth",authRoutes);
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {

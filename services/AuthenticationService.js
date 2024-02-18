@@ -45,7 +45,12 @@ class AuthenticationService {
             'username': data.identifier,
             'roles': data.roles
         }, keys.private, { algorithm : 'RS256', expiresIn : '2h' });
-    }  
+    }
+    
+    async createMagiklinktoken(){
+        const magikToken = crypto.createHash('sha256', `MagikToken for coursemate: ${new Date()}`);
+        return magikToken.digest('hex');
+    }
 
     async getKeys(){
         const paths = ["./" + process.env.JWT_PRIVATE_KEY,"./" + process.env.JWT_PUBLIC_KEY];
