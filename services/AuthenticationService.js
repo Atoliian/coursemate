@@ -25,6 +25,17 @@ class AuthenticationService {
         return {"code" : 500, "message": "Your password must be 10 characters minimum"};
     }
 
+    async checkPassword(user, password){
+        if (user) {
+            const isPasswordMatch = await bcrypt.compare(password, user.password);
+            if (isPasswordMatch) {
+                return true; // Authentification réussie
+            }
+            return false;
+        }
+        return false;
+    }
+
     /**
      * Generates an identifier from the name
      * [RETURN STRING]

@@ -4,22 +4,26 @@ const categoryController = require("../controllers/CategoryController");
 const router = express.Router();
 const { body } = require("express-validator");
 
-router.get("/", categoryController.getAll);
-router.get("/:id", categoryController.getById);
+const authenticateToken = require("../middlewares/authenticateToken");
+
+router.get("/", authenticateToken, categoryController.getAll);
+router.get("/:id", authenticateToken, categoryController.getById);
 router.post(
   "/",
+  authenticateToken,
   [
     body("wording").isString().notEmpty(),
     body("color").optional().isHexColor(),
   ],
   categoryController.create
-); // TODO : Rajouter une règle de sécurité pour cette route, que les admins
-router.put("/:id", 
+);
+router.put("/:id",
+  authenticateToken,
   [
     body("wording").optional().isString(),
     body("color").optional().isHexColor(),
   ],
-  categoryController.update); // TODO : Rajouter une règle de sécurité pour cette route, que les admins
-router.delete("/:id", categoryController.remove); // TODO : Rajouter une règle de sécurité pour cette route, que les admins
+  categoryController.update);
+router.delete("/:id", authenticateToken, categoryController.remove);
 
 module.exports = router;
