@@ -11,6 +11,7 @@ require('@babel/register')({
 const categoryRoutes = require("./routes/CategoryRoutes");
 const itemRoutes = require("./routes/ItemRoutes");
 const authRoutes = require('./routes/AuthenticationRoutes');
+const bracketRoutes = require('./routes/BracketRoutes');
 
 // import de la couche sécurité
 app.use(helmet());
@@ -22,6 +23,7 @@ app.use(rateLimitMiddleware);
 app.use("/api/categories", categoryRoutes);
 app.use("/api/items", itemRoutes);
 app.use("/api/auth",authRoutes);
+app.use("/api/brackets", bracketRoutes);
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {

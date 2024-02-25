@@ -30,6 +30,7 @@ model Bracket {
   name    String?
   owner    User     @relation(fields: [ownerId], references: [id])
   ownerId  Int
+  items    Json?
   createdAt DateTime @default(now())
   updatedAt DateTime?
   expiredAt DateTime?
@@ -52,3 +53,4 @@ model Item {
   categoryId  Int
   createdAt DateTime @default(now())
 }
+

@@ -15,7 +15,7 @@ const itemController = {
       const itemsPerPage = parseInt(req.query.itemsPerPage) || 10;
       const categories = req.query.categories;
       const keyword = req.query.wording;
-      const query = ((Array.isArray(categories)&& categories.length > 0) && keyword)
+      let query = ((Array.isArray(categories)&& categories.length > 0) && keyword)
         ? await prisma.item.findMany({
           where: {
             AND: [
@@ -50,12 +50,15 @@ const itemController = {
         })
         : await prisma.item.findMany();
 
+      query = await itemService.serializeItem(query);
+
       const items = await defaultService.paginate(
         query,
         "items",
         currentPage,
         itemsPerPage
       );
+      
       res.status(200).json(items);
     } catch (error) {
       console.error("Error retrieving items :", error);
@@ -65,11 +68,16 @@ const itemController = {
   getById: async (req, res) => {
     try {
       const itemId = parseInt(req.params.id);
-      const item = await prisma.item.findUniqueOrThrow({
+      let item = await prisma.item.findUniqueOrThrow({
         where: {
           id: itemId,
         },
       });
+
+      console.log(item);
+
+      item = await itemService.serializeItem(item);
+
       res.status(200).json(item);
     } catch (error) {
       console.error("Error retrieving items :", error);

@@ -1,5 +1,7 @@
 const jwt = require('jsonwebtoken');
 const AuthenticationService = require("../services/AuthenticationService");
+const { PrismaClient } = require("@prisma/client");
+const prisma = new PrismaClient();
 
 
 const authenticateService = new AuthenticationService();
@@ -17,13 +19,36 @@ function authenticateToken(req, res, next) {
 
         if (err) return res.sendStatus(403);
 
-        // add new informations here !
-        user.firstInformation = "yollo";
-        user.secondInformation = "woollo";
+        prisma.user.findFirstOrThrow({
+          where: {
+            AND: [
+              {
+                email: {
+                  contains: user.email,
+                },
+              },
+              {
+                active: true,
+              },
+            ],
+              
+          },
+        }).then(stockedUser => {
+          req.user = {
+            id: stockedUser.id,
+            identifier: stockedUser.identifier,
+            email: stockedUser.email,
+            name: stockedUser.name,
+            roles: user.roles
+          };
 
+          console.log(req.user);
+          next()
 
-        req.user = user;
-        next();
+        }).catch(error => {
+          console.error(error);
+          return res.sendStatus(500);
+        });
       });
     })
     .catch(error => {

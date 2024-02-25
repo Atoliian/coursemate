@@ -115,7 +115,7 @@ const authenticationController = {
             const token = await authenticationService.createTokenJWT({
               'email': user.email,
               'identifier': user.identifier,
-              'roles' : user.email === process.env.ADMIN_EMAIL ? ['ROLE_USER','ROLE_ADMIN'] : ['ROLE_USER']
+              'roles' : process.env.ADMIN_EMAILS.includes(user.email) ? ['ROLE_USER','ROLE_ADMIN'] : ['ROLE_USER']
             });
             res.status(200).json(token);
           }
