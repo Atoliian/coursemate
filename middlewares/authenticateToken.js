@@ -42,7 +42,6 @@ function authenticateToken(req, res, next) {
             roles: user.roles
           };
 
-          console.log(req.user);
           next()
 
         }).catch(error => {

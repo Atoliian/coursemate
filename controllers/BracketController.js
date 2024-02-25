@@ -64,8 +64,6 @@ const bracketController = {
       wording = updatedData["wording"];
       color = updatedData["color"];
 
-      console.log(wording, color);
-
       const categoryUpdated = await prisma.categoryItem.update({
         where: {
           id: categoryId,
@@ -140,7 +138,6 @@ const bracketController = {
           const itemToDelete = existingItems.find(item => item.id === id);
           if(itemToDelete){
             const indexToDelete = existingItems.indexOf(itemToDelete);
-            console.log(indexToDelete);
             existingItems.splice(indexToDelete, 1);
             const updatedBracket = await prisma.bracket.update({
               where: { id: bracketId }, 

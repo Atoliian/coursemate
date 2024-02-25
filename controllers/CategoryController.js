@@ -86,8 +86,6 @@ const categoryController = {
       wording = updatedData["wording"];
       color = updatedData["color"];
 
-      console.log(wording, color);
-
       const categoryUpdated = await prisma.categoryItem.update({
         where: {
           id: categoryId,

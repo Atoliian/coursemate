@@ -74,8 +74,6 @@ const itemController = {
         },
       });
 
-      console.log(item);
-
       item = await itemService.serializeItem(item);
 
       res.status(200).json(item);
