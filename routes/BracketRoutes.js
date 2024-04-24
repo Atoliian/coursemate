@@ -13,10 +13,19 @@ router.post(
   authenticateToken,
   bracketCreation,
   [
-    body("wording").isString().notEmpty(),
+    body("name").isString().notEmpty(),
     body("color").optional().isHexColor(),
   ],
   bracketController.create
+);
+
+router.patch(
+  "/:id",
+  authenticateToken,
+  [
+    body("name").isString().notEmpty()
+  ],
+  bracketController.update
 );
 
 router.delete("/:id", authenticateToken, bracketController.remove);

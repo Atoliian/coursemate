@@ -58,22 +58,18 @@ const bracketController = {
         return res.status(422).json({ errors: errors.array() });
       }
 
-      const categoryId = parseInt(req.params.id);
-      let { wording, color } = req.body;
-      const updatedData =  await categoryService.compareDataForUpdate(categoryId, {"wording": wording, "color": color});
-      wording = updatedData["wording"];
-      color = updatedData["color"];
+      const bracketId = parseInt(req.params.id);
+      let { name } = req.body;
 
-      const categoryUpdated = await prisma.categoryItem.update({
+      const bracketUpdated = await prisma.bracket.update({
         where: {
-          id: categoryId,
+          id: bracketId,
         },
         data: {
-          wording,
-          color,
+          name
         },
       });
-      res.status(201).json(categoryUpdated);
+      res.status(201).json(bracketUpdated);
        
     }catch (error) {
       console.error("Error retrieving categories :", error);
