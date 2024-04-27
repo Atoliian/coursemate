@@ -33,6 +33,20 @@ const bracketController = {
       res.status(500).json({ error: "Error server" });
     }
   },
+  getById: async (req, res) => {
+    try {
+      const bracketId = parseInt(req.params.id);
+      const bracket = await prisma.bracket.findUniqueOrThrow({
+        where: {
+          id: bracketId,
+        },
+      });
+      res.status(200).json(bracket);
+    } catch (error) {
+      console.error("Error retrieving brackets :", error);
+      res.status(404).json({ error: "Bracket not found" });
+    }
+  },
   create: async (req, res) => {
     try {
       const {expiredAt, ownerId, name, color} = req.body;

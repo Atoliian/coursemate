@@ -8,6 +8,7 @@ const authenticateToken = require("../middlewares/authenticateToken");
 const bracketCreation = require("../middlewares/bracketCreation");
 
 router.get("/", authenticateToken, bracketController.getAll);
+router.get("/:id", authenticateToken, bracketController.getById);
 router.post(
   "/",
   authenticateToken,
